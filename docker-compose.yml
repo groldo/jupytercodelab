@@ -1,10 +1,39 @@
 version: "3"
+
+volumes:
+  work:
+    external: true
+
 services:
   jupyter:
+    restart: unless-stopped
     build: .
     environment:
       GRANT_SUDO: "yes"
     user: root
-    ports:
-      - 8888:8888
+    volumes:
+      - work:/home/jovyan/work
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jupyter.rule=Host(`$HOSTIPADDRESS`)"
+      - "traefik.http.routers.jupyter.entrypoints=web"
+      - "traefik.http.routers.jupyter_s.rule=Host(`$HOSTIPADDRESS`)"
+      - "traefik.http.routers.jupyter_s.entrypoints=webs"
+      - "traefik.http.routers.jupyter_s.tls=true"
 
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.webs.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
