@@ -13,6 +13,7 @@ services:
     user: root
     volumes:
       - work:/home/jovyan/work
+      - $HOME/.ssh:/home/jovyan/.ssh
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jupyter.rule=Host(`$HOSTIPADDRESS`)"
@@ -25,7 +26,8 @@ services:
     image: "traefik:v2.10"
     container_name: "traefik"
     command:
-      #- "--log.level=DEBUG"
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
