@@ -1,6 +1,6 @@
-FROM jupyter/scipy-notebook:2023-02-28 
+FROM jupyter/scipy-notebook:2023-10-02
 
-ENV CODE_VERSION=4.12.0
+ENV CODE_VERSION=4.17.1
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
