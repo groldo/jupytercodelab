@@ -14,6 +14,21 @@ RUN apt-get update --yes && \
         g++ clang htop libopencv-dev && \
     apt-get --quiet clean && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+	&& apt-get -y install --no-install-recommends texlive-latex-recommended \
+                        texlive-latex-extra \
+                        texlive-lang-german \
+                        tex-common \
+                        texlive-fonts-extra \
+                        texlive-science \
+                        texlive-xetex \
+                        locales \
+                        pandoc \
+                        latexmk \
+                        lmodern \
+                        wget \
+    && apt-get --quiet clean && rm -rf /var/lib/apt/lists/*
+
 RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb
